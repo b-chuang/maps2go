@@ -3,13 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/style.css">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Test</title>
+    <title>Project 3</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="/styles/style.css">
+
 </head>
 <body>
+    <main>
+        <header>
+            <h1>Maps 2 Go</h1>
+        </header>
+        <form action="">
+            <fieldset class="leavingFrom">
+                <h2>Leaving From:</h2>
 
-    <h2>"TESTING"</h2>
+                <label for="leaving_from">From:</label>
+                <input id="leaving_from" type="text">
+                
+            </fieldset>
+
+            <fieldset class="goingTo">
+                <h2>Going To:</h2>
+                
+                <label for="going_to">Going:</label>
+                <input id="going_to" type="text">
+            
+            </fieldset>
+
+            <fieldset class="submitButton">
+               
+
+                <div class="submit-container">
+                    <input type="submit" value="Get Me Directions">
+                </div>
+
+                <!-- <div class="clear-button">
+                    <button>Clear Selection</button>
+                </div> -->
+            
+            </fieldset>
+        </form>
+
+        <section class="results">
+            <!-- we want the result output here -->
+        </section>
+
+
+        <section class="action" id='result'>
+          <!--   <h1>PATIENT IS IN CRITICAL CONDITION</h1> // value 1-8 -->
+        </section>
+
+<!--         <section class="action">
+            <h2>PATIENT IS IN MEDIUM LEVEL RISK</h2> //value 8-12
+        </section>
+
+        <section class="action">
+            <h3>PATIENT IS IN LOW LEVEL RISK</h3> //value 12-15
+        </section> -->
+
+
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+    <script src="script.js"></script>
     
 </body>
 </html>
