@@ -146,7 +146,8 @@ h1, h2, h3, h4, h5, h6, ul {
 h1 {
   font-family: Helvetica, sans-serif; }
 
-/* MAP STYLING START */
-#mapContainer {
-  width: 800px;
-  height: 480px; }
+  .ui-autocomplete {
+    background: white;
+    border: 2px solid black;
+    max-width: 400px;
+}

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -11,21 +11,24 @@
     <link rel="stylesheet" href="styles/style.css">
     <script src="http://js.api.here.com/v3/3.0/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
     <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+
 </head>
+
+<div></div>
 
 <body>
     <main>
         <header>
             <h1>Maps 2 Go</h1>
-        </header>
-        <div id="mapContainer"></div>
-
+        </header>z
+        <div style="width: 640px; height: 480px" id="mapContainer"></div>
+        <div id="alert-placeholder">Block</div>
         <form action="">
             <fieldset class="leavingFrom">
                 <h2>Leaving From:</h2>
 
                 <label for="leaving_from">From:</label>
-                <input id="leaving_from" type="text">
+                <input id="leaving_from" onkeyup="fromLoc()" type="text">
 
             </fieldset>
 
@@ -50,7 +53,7 @@
 
             </fieldset>
         </form>
-
+<div id="dataBlock"></div>
         <section class="results">
             <!-- we want the result output here -->
         </section>
@@ -72,25 +75,65 @@
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
     <script src="script.js"></script>
+    <script src="js/jquery-ui-1.9.2.custom.min.js" type="text/javascript" charset="utf-8"></script>
     <script>
-        // Initialize the platform object:
-        var platform = new H.service.Platform({
-            'app_id': 'GcFeBFxSQy59KaIwNGNT',
-            'app_code': 'hUm4bhECAqoXGLXd7TV1Xw'
+    //>Map Object
+    // Initialize the platform object:
+    var platform = new H.service.Platform({
+    'app_id': 'GcFeBFxSQy59KaIwNGNT',
+    'app_code': 'hUm4bhECAqoXGLXd7TV1Xw'
+    });
+
+    // Obtain the default map types from the platform object
+    var maptypes = platform.createDefaultLayers();
+
+    // Instantiate (and display) a map object:
+    var map = new H.Map(
+    document.getElementById('mapContainer'),
+    maptypes.normal.map,
+    {
+      zoom: 10,
+      center: { lng: 13.4, lat: 52.51 }
+    });
+    //>End of Map Object
+    var availableTags = [];
+
+    //AJAX Request to Here.com
+    function fromLoc(){
+      fromTxt = document.getElementById('leaving_from').value;
+
+        $.ajax({
+        dataType: 'json',
+        url: "https://autocomplete.geocoder.api.here.com/6.2/suggest.json?app_id=GcFeBFxSQy59KaIwNGNT&app_code=hUm4bhECAqoXGLXd7TV1Xw&query="+fromTxt+"&maxresults=10",
+        type: "GET",
+        success: function (data) {
+          console.log(data);
+          var i;
+
+          for (i = 0; i < data.suggestions.length; i++) {
+            availableTags.push(data.suggestions[i].label);
+          }
+          //document.getElementById('dataBlock').innerHTML = 'test';
+          //  document.getElementById('dataBlock').innerHTML = jsonObj;
+
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          //No Result found
+        }
         });
 
-        // Obtain the default map types from the platform object
-        var maptypes = platform.createDefaultLayers();
+      }
+    //End of Ajax Request to here.com
 
-        // Instantiate (and display) a map object:
-        var map = new H.Map(
-            document.getElementById('mapContainer'),
-            maptypes.normal.map,
-            {
-                zoom: 10,
-                center: { lng: 13.4, lat: 52.51 }
-            });
-    </script>
+    //Autocomplete Code
+    $( function() {
+
+    $( "#leaving_from" ).autocomplete({
+      source: availableTags
+    });
+  } );
+    //End of Autocomplete
+
+  </script>
 </body>
-
 </html>
