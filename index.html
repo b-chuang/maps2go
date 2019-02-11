@@ -9,13 +9,19 @@
     <link rel="stylesheet" href="styles/style.css">
     <script src="http://js.api.here.com/v3/3.0/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
     <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css" />
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
 </head>
 <body>
     <main>
         <header>
-            <h1>Maps 2 Go</h1>
-        </header>z
-        <div style="width: 640px; height: 480px" id="mapContainer"></div>
+            <h1>Maps2Go</h1>
+        </header>
+
         <div id="alert-placeholder">Block</div>
         <form action="">
             <fieldset class="leavingFrom">
@@ -23,6 +29,10 @@
                 <label for="leaving_from">From:</label>
                 <input id="leaving_from" onkeydown="fromLoc()" type="text">
             </fieldset>
+            <input type="hidden" name="fromLocHiddenLat" id='fromLocLat'>
+            <input type="hidden" name="toLocHiddenLat" id='toLocLat'>
+            <input type="hidden" name="fromLocHiddenLong" id='fromLocLong'>
+            <input type="hidden" name="toLocHiddenLong" id='toLocLong'>
             <fieldset class="goingTo">
                 <h2>Going To:</h2>
                 <label for="going_to">Going:</label>
@@ -51,6 +61,13 @@
             <h3>PATIENT IS IN LOW LEVEL RISK</h3> //value 12-15
         </section> -->
     </main>
+
+    <div id="map" style="width: 600px; height: 400px; background: grey"></div>
+    <div id="panel" style="width: 600px;"></div>
+    <script type="text/javascript" src='js/app.js'></script>
+
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
     <script src="script.js"></script>
     <script src="js/jquery-ui-1.9.2.custom.min.js" type="text/javascript" charset="utf-8"></script>
@@ -61,10 +78,8 @@
     'app_id': 'GcFeBFxSQy59KaIwNGNT',
     'app_code': 'hUm4bhECAqoXGLXd7TV1Xw'
     });
-
     // Obtain the default map types from the platform object
     var maptypes = platform.createDefaultLayers();
-
     // Instantiate (and display) a map object:
     var map = new H.Map(
     document.getElementById('mapContainer'),
@@ -76,12 +91,10 @@
     //>End of Map Object
     var availableTags = [];
     var availableTags2 = [];
-
     //AJAX Request to Here.com
     function fromLoc(){
       availableTags = [];
       fromTxt = document.getElementById('leaving_from').value;
-
         $.ajax({
         dataType: 'json',
         url: "https://autocomplete.geocoder.api.here.com/6.2/suggest.json?app_id=GcFeBFxSQy59KaIwNGNT&app_code=hUm4bhECAqoXGLXd7TV1Xw&query="+fromTxt+"&maxresults=10",
@@ -106,8 +119,6 @@
         }
         });
       }
-
-    
 
       function toLoc(){
         availableTags2 = [];
@@ -134,8 +145,11 @@
           }
           });
         }
-    //End of Ajax Request to here.com
+      //End of Ajax Request to here.com
       //Click Function work Start
+
+
+
       function getDirection(){
         var loc1 = document.getElementById('leaving_from').value;
         var loc2 = document.getElementById('going_to').value;
@@ -153,6 +167,9 @@
             success: function (data) {
               var fromLat = data.Response.View[0].Result[0].Location.DisplayPosition.Latitude;
               var fromLang = data.Response.View[0].Result[0].Location.DisplayPosition.Longitude;
+              $('#fromLocLat').val(fromLat);
+              $('#fromLocLong').val(fromLang);
+
             }
           });
 
@@ -170,13 +187,16 @@
               success: function (data) {
                 var toLat = data.Response.View[0].Result[0].Location.DisplayPosition.Latitude;
                 var toLang = data.Response.View[0].Result[0].Location.DisplayPosition.Longitude;
+                $('#toLocLat').val(toLat);
+                $('#toLocLong').val(toLang);
+
               }
           });
 
 
           //Code for Directions
 
-          $.ajax({
+          /*$.ajax({
             url: 'https://route.api.here.com/routing/7.2/calculateroute.json',
             type: 'GET',
             dataType: 'jsonp',
@@ -192,7 +212,9 @@
           success: function (data) {
             console.log('Direction Data : '+ JSON.stringify(data));
           }
-          });
+        }); */
+calculateRouteFromAtoB (platform);
+        
 
 
       }
@@ -201,7 +223,6 @@
     $( function() {
     } );
     //End of Autocomplete
-
 
   </script>
 </body>
